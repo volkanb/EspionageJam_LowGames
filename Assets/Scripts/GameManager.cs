@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour {
         if (!_init)
             initializeCards();
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && !Card.DO_NOT)
             checkCards();
     }
 
@@ -82,6 +82,7 @@ public class GameManager : MonoBehaviour {
 
         if(cards[c[0]].GetComponent<Card>().carddValue == cards[c[1]].GetComponent<Card>().carddValue)
         {
+            Debug.Log("Matched card value: " + cards[c[0]].GetComponent<Card>().carddValue);
             x = 2;
             _matches--;
             matchText.text = "Number of Matches: " + _matches;

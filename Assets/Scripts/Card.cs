@@ -33,9 +33,9 @@ public class Card : MonoBehaviour {
 
     public void flipCard() {
 
-        if (_state == 0)
+        if (_state == 0 && !DO_NOT)
             _state = 1;
-        else if (_state == 1)
+        else if (_state == 1 && !DO_NOT)
             _state = 0;
 
         if (_state == 0 && !DO_NOT)
