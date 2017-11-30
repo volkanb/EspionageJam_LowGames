@@ -17,16 +17,16 @@ public class Card : MonoBehaviour {
     private Sprite _cardBack;
     private Sprite _cardFace;
 
-    private GameObject _manager;
+    private GameManager _manager;
 
     void Start() {
         _state = 1;
-        _manager = GameObject.FindGameObjectWithTag("Manager");
+        _manager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManager>();
     }
 
     public void setupGraphics() {
-        _cardBack = _manager.GetComponent<GameManager>().getCardBack();
-        _cardFace = _manager.GetComponent<GameManager>().getCardFace(_cardValue);
+        _cardBack = _manager.getCardBack();
+        _cardFace = _manager.getCardFace(_cardValue);
 
         flipCard();
     }
@@ -42,6 +42,11 @@ public class Card : MonoBehaviour {
             GetComponent<Image>().sprite = _cardBack;
         else if (_state == 1 && !DO_NOT)
             GetComponent<Image>().sprite = _cardFace;
+
+        if (_manager.getMatches() == 0)
+        {
+            _manager.choseTarget(carddValue);
+        }
     }
 
     public int carddValue {
@@ -71,5 +76,11 @@ public class Card : MonoBehaviour {
         else if (_state == 1)
             GetComponent<Image>().sprite = _cardFace;
         DO_NOT = false;
+    }
+
+    public void rewindCard()
+    {
+        GetComponent<Image>().sprite = _cardBack;
+        _state = 0;
     }
 }

@@ -10,10 +10,19 @@ public class GameManager : MonoBehaviour {
     public Sprite cardBack;
     public GameObject[] cards;
     public Text matchText;
+    public Text timerText;
+    public string[] clues;
+    public Text guideText;
+    public GameObject[] clueTexts;
+    public float[] loopTimes;
 
     private bool _init = false;
     private int _matches = 10;
+    private float remainingTime = 65f;
 
+    private int totalNumberOfMatches = 1;
+    private int noOfShownClues = 0;
+    private int puzzleLoopCount = 0;
 
     // Update is called once per frame
     void Update() {
@@ -22,6 +31,16 @@ public class GameManager : MonoBehaviour {
 
         if (Input.GetMouseButtonUp(0) && !Card.DO_NOT)
             checkCards();
+
+        remainingTime -= Time.deltaTime;
+        if (remainingTime <= 0)
+        {
+            SceneManager.LoadScene("EndingLose");
+        }
+        timerText.text = Mathf.FloorToInt(remainingTime).ToString();
+        
+        
+
     }
 
     void initializeCards()
@@ -82,12 +101,17 @@ public class GameManager : MonoBehaviour {
 
         if(cards[c[0]].GetComponent<Card>().carddValue == cards[c[1]].GetComponent<Card>().carddValue)
         {
-            Debug.Log("Matched card value: " + cards[c[0]].GetComponent<Card>().carddValue);
+            totalNumberOfMatches++;
+            
             x = 2;
             _matches--;
             matchText.text = "Number of Matches: " + _matches;
-            if (_matches == 0)
-                SceneManager.LoadScene("Menu");
+            if (_matches == 0)                
+                guideText.gameObject.SetActive(true);
+
+            if (totalNumberOfMatches % 7 == 0)
+                showClue();             
+                                    
         }
         for(int i = 0; i < c.Count; i++ )
         {
@@ -97,6 +121,47 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-     
-		
-	}
+    void showClue()
+    {
+        if (noOfShownClues < 3)
+        {
+            clueTexts[noOfShownClues].SetActive(true);
+            noOfShownClues++;
+        }
+        
+    }
+
+     public int getMatches()
+    {
+        return _matches;
+    }
+
+    public void choseTarget(int i)
+    {
+        if (i == 7)
+            SceneManager.LoadScene("EndingWin");
+        else
+        {
+            foreach (GameObject card in cards)
+                card.GetComponent<Card>().rewindCard();
+            if (puzzleLoopCount < 3)            
+                remainingTime = 40f; 
+            else
+                remainingTime = loopTimes[puzzleLoopCount];
+            puzzleLoopCount++;
+            _matches = 10;
+            Card.DO_NOT = false;
+            StartCoroutine(hideGuide());
+        }
+    }
+
+    IEnumerator hideGuide()
+    {
+        guideText.text = "WRONG TARGET!";
+        yield return new WaitForSeconds(5);
+        guideText.gameObject.SetActive(false);
+        guideText.text = "ELIMINATE!";
+
+    }
+
+}

@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 71078149250598a478e8529b04ad8b14
+timeCreated: 1512036646
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: AgitProp
+  fontNames:
+  - AgitProp
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
